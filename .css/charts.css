@@ -1,0 +1,124 @@
+.slideraxis {
+font: 0px sans-serif;
+-webkit-user-select: none;
+-moz-user-select: none;
+user-select: none;
+}
+.slideraxis .sliderdomain {
+display:none;
+fill: none;
+stroke: #000;
+}
+.slideraxis .sliderhalo {
+fill:none;
+stroke:#b1b2b3;
+stroke-width:1px;
+}
+.slider .sliderhandle {
+fill: #E1EFFA;
+stroke: #666;
+stroke-width: 2px;
+pointer-events: none;
+}
+.node rect {
+cursor: move;
+fill-opacity: .9;
+shape-rendering: crispEdges;
+padding:20px;
+}
+.nodetext {
+cursor:pointer;
+font-size:11px;
+font-family:tahoma,sans-serif,arial;
+padding-top:5px;
+padding-bottom:5px;
+}
+.nodetext:hover {
+font-weight:bold;
+}
+.link {
+fill: none;
+stroke: #666;
+stroke-opacity: .2;
+}
+.link1 {
+fill: none;
+stroke: #cc0000;
+stroke-opacity: .4;
+}
+.link:hover, .link1:hover {
+stroke-opacity: .5;
+}
+.axis {
+stroke: #000;
+stroke-width: 1.5px;
+}
+.node circle {
+stroke: #000;
+}
+.link {
+fill: none;
+stroke: #999;
+stroke-width: 1.5px;
+stroke-opacity: .3;
+}
+.link.active {
+stroke: red;
+stroke-width: 2px;
+stroke-opacity: 1;
+}
+.node circle.active {
+stroke: red;
+stroke-width: 3px;
+}
+/* heatmap */
+text.mono {
+font-size: 10px;
+fill: #aaa;
+padding-left:10px;
+}
+text.chrtlbl {
+font-family: tahoma, calibri, helvetica, sans;
+font-size: 11px;
+fill: #333366;
+padding-left:20px;
+}
+text.axis-workweek {
+fill: #000;
+}
+text.axis-worktime {
+fill: #000;
+}
+/* pie chart */
+path.slice {
+stroke-width:2px;
+}
+polyline {
+stroke: #666;
+stroke-width: 1px;
+fill: none;
+}
+.pielbl {
+font-size:9px;
+color:#545454;
+padding:5px;
+}
+/* line chart */
+.lineaxis path,.lineaxis line {
+fill: none;
+stroke: #c9c9c9;
+shape-rendering: crispEdges;
+}
+.label {
+color:#e9e9e9;
+font-size:10px;
+}
+.linedot {
+fill:#666;
+stroke:#fff;
+}
+.axistxt {
+font-size:10px;
+fill: #333366;
+}
+
