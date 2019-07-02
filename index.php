@@ -1,24 +1,5 @@
 <?php
 
-//
-//
-//      Copyright (C) 2012 Paul Halliday <paul.halliday@gmail.com>
-//
-//      This program is free software: you can redistribute it and/or modify
-//      it under the terms of the GNU General Public License as published by
-//      the Free Software Foundation, either version 3 of the License, or
-//      (at your option) any later version.
-//
-//      This program is distributed in the hope that it will be useful,
-//      but WITHOUT ANY WARRANTY; without even the implied warranty of
-//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//      GNU General Public License for more details.
-//
-//      You should have received a copy of the GNU General Public License
-//      along with this program.  If not, see <http://www.gnu.org/licenses/>.
-//
-//
-
 include_once '.inc/session.php';
 include_once '.inc/config.php';
 include_once '.inc/functions.php';
@@ -37,7 +18,7 @@ dbC();
 <link rel="stylesheet" type="text/css" href=".css/jquery-jvectormap-1.2.2.css" />
 <link rel="stylesheet" type="text/css" href=".css/charts.css" />
 <link rel="stylesheet" type="text/css" href=".css/spectrum.css" />
-<!--<script type="text/javascript" src=".js/jq.js"></script>--> 
+<script type="text/javascript" src=".js/jq.js"></script>
 <script type="text/javascript" src=".js/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" src=".js/squertFunctions.js"></script>
 <script type="text/javascript" src=".js/squertCal.js"></script>
@@ -55,10 +36,8 @@ dbC();
 </head>
 <body>
 <div id=tab_group class=tab_group>
-  
-  <!--div id=t_inc class=tab>INCIDENTS</div-->
-  <div id=t_ovr class=tab>SUMMARY</div>
- 
+  <div id=t_sum class=tab>EVENTOS</div>
+  <div id=t_ovr class=tab>RESUMEN</div> 
   <div id=t_search class=search data-state=0>
     <div data-box=ret class="b_update icon"><img title=refresh class="il ilb" src=.css/update.png></div>
     <div class="icon_notifier"><img src=.css/exc.png></div>
@@ -76,70 +55,150 @@ dbC();
     <div class=t_pbar></div>
     <div class=t_stats></div>
   </div>
-  <!--div class=db_links>
-    <div class=db_linkt>view:</div>
+  <div class=db_links>
+    <div class=db_linkt>vistas</div>
     <div class=db_link data-val=ip data-state=1>IP</div>
-    <div class=db_link data-val=sc>SOURCE COUNTRY</div>
-    <div class=db_link data-val=dc>DESTINATION COUNTRY</div>
+    <div class=db_link data-val=sc>PAIS DE ORIGEN</div>
+    <div class=db_link data-val=dc>pAIS DE DESTINO</div>
     <div class=db_linkt>type:</div>
-    <div class=db_type data-type=cl>CLUSTER LAYOUT</div>
-    <div class=db_type data-type=eb>EDGE BUNDLING</div>
-    <div class=db_type data-type=hp>HIVE PLOT</div>
     <div class=db_type data-type=sk data-state=1>SANKEY DIAGRAM</div>
-    <div class=db_save><span class=links>save as svg</span></div>
-  </div-->
+  </div>
 </div>
+
 <div class=lr>
-
-</div>
-
-  
-  <div class=rl>
-    <div id=t_view_content class=content>
-      <div id=db_help class="hide label100">This view shows source and destination connections. The width of each ribbon indicates the volume of events. If a source and destination are linked with a red line then an event has occured in both directions (A -> B, B -> A). When no filters are present and only a single event exists, lone hosts that are associated with other lone hosts are not shown. Nodes can be repositioned by clicking on the desired node and then dragging it to a new position. IPs can be added as filters by double clicking their label. When you are on this page and a filter is in place the 'enter' key will take you to the events. To recreate the view (with the filter) click the update link.</div>
-      <div class=db_view></div> 
+  <div class=content-left>
+    <div class=event_cont>
+      <div class=label_l><span class=ec_label>TOGGLE</span><div class=label_m><img data-sec=t title=collapse class="il st" src=.css/uarr.png></div></div>
+      <div class=secl id=sec_t>
+        <div class=label>solo filas</div><div id=rt class=tvalue_on>on</div>
+        <div class=label>agrupaciones</div><div id=gr class=tvalue_on>on</div>
+      </div>
     </div>
+
+    <div class=event_cont>
+      <div class=label_l><span class=ec_label>RESUMEN</span><div class=label_m><img data-sec=s title=collapse class="il st" src=.css/uarr.png></div></div>
+      <div class=secl id=sec_s>  
+        <div class=label>eventos en cola</div><div id=qtotal class=value>-</div>
+        <div class=label>total de eventos</div><div id=etotal class=value>-</div>
+        <div class=label>total de firmas</div><div id=esignature class=value>-</div>
+        <!--div class=label>total sources</div><div id=esrc class=value>-</div-->
+        <!--div class=label>total destinations</div><div id=edst class=value>-</div-->
+      </div>
+    </div>
+
+    <div class=event_cont>
+      <div class=label_l><span class=ec_label>PRIORIDAD</span><div class=label_m><img data-sec=p title=collapse class="il st" src=.css/uarr.png></div></div>
+      <div class=secl id=sec_p>
+        <div class=label>alta</div><div id=pr_1 class=value>-</div>
+        <div class=label>mediana</div><div id=pr_2 class=value>-</div>
+        <div class=label>baja</div><div id=pr_3 class=value>-</div>
+        <div class=label>otra</div><div id=pr_4 class=value>-</div>
+      </div>
+    </div>
+
+    <div class=event_cont>
+      <div class=label_l><span class=ec_label>CLASIFICACION</span><div class=label_m><img data-sec=c title=collapse class="il st" src=.css/uarr.png></div></div>
+      <div class=secl id=sec_c>  
+
+        <div id=b_class-11 class=label_c data-c=11 data-cn=C1 title='compromised L1 (F1)'>
+        <div class=b_C1></div>En peligro L1</div><div data-type=st id=c-11 class="ecv value_link">-</div>
+
+        <div id=b_class-12 class=label_c data-c=12 data-cn=C2 title='compromised L2 (F2)'>
+        <div class=b_C2></div>En peligro L2</div><div data-type=st id=c-12 class="ecv value_link">-</div>
+      
+        <div id=b_class-13 class=label_c data-c=13 data-cn=C3 title='attempted unauthorized access (F3)'>
+        <div class=b_C3></div>intentos de acceso</div><div data-type=st id=c-13 class="ecv value_link">-</div>
+
+        <div id=b_class-14 class=label_c data-c=14 data-cn=C4 title='denial of service attack (F4)'>
+        <div class=b_C4></div>denegacion de servicios</div><div data-type=st id=c-14 class="ecv value_link">-</div>
+      
+        <div id=b_class-15 class=label_c data-c=15 data-cn=C5 title='policy violation (F5)'>
+        <div class=b_C5></div>violaciones de politica</div><div data-type=st id=c-15 class="ecv value_link">-</div>
+
+        <div id=b_class-16 class=label_c data-c=16 data-cn=C6 title='reconnaissance (F6)'>
+        <div class=b_C6></div>reconocimiento</div><div data-type=st id=c-16 class="ecv value_link">-</div>
+      
+        <div id=b_class-17 class=label_c data-c=17 data-cn=C7 title='malicious (F7)'>
+        <div class=b_C7></div>malicious</div><div data-type=st id=c-17 class="ecv value_link">-</div>
+
+        <div id=b_class-1 class=label_c data-c=1 data-cn=NA title='no further action required (F8)'>
+        <div class=b_NA></div>no action req&#x2019;d.</div><div data-type=st id=c-1 class="ecv value_link">-</div>
+      
+        <div id=b_class-2 class=label_c data-c=2 data-cn=ES title='escalate event (F9)'>
+        <div class=b_ES></div>eventos de escalamiento</div><div data-type=st id=c-2 class="ecv value_link">-</div>
+
+      </div>
+    </div>
+
+    <div class=event_cont>
+      <div class=label_l><span class=ec_label>ETIQUETAS</span>
+        <div class=label_m><img data-sec=tg title=collapse class="il st" src=.css/uarr.png></div>  
+      </div>
+      <div class=secl id=sec_tg>
+        <div id=tg_box class=tg_box>
+          <div class=tag_empty>sin etiquetas</div>
+        </div>
+      </div>
+    </div>
+
+    <div class=event_cont>
+      <div class=label_l><span class=ec_label>HISTORIAL</span>
+        <div class=label_m><img data-sec=h title=collapse class="il st" src=.css/uarr.png></div>  
+      </div>
+      <div class=secl id=sec_h>
+        <div id=h_box class=h_box>
+          <div class=history_empty>sin historial</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class=content-right>
+    <div id=t_sum_content class=content>
+      <div id=aaa-00 class=aaa><div class=times></div></div>
+    </div>
+  </div>
+
+  <div class=rl>
     <div id=t_inc_content class=content>&nbsp;Not broken, just not done.</div>
     <div id=t_ovr_content class=content>
       <br>     
-      <div class=twopane>
-        <div class=ovbl>TOP SIGNATURES</div><div id=ovestat class=ovstat></div><div class=ovbi id=ov_signature_msg></div><div class=ovsl id=ov_signature_sl></div>
+      <div class=onepane>
+        <div class=ovbl>TOP FIRMAS</div><div id=ovestat class=ovstat></div><div class=ovbi id=ov_signature_msg></div><div class=ovsl id=ov_signature_sl></div>
         <div id=ov_signature></div>
       </div>
-   <div class=twopane>
-        <div class=ovbl>TOP SOURCE IPS</div><div class=ovbi id=ov_srcip_msg></div><div class=ovsl id=ov_srcip_sl></div>
+      <div class=twopane>
+        <div class=leftpane>
+          <div class=ovbl>TOP IPS ORIGEN</div><div class=ovbi id=ov_srcip_msg></div><div class=ovsl id=ov_srcip_sl></div>
           <div id=ov_srcip></div>
-      </div>
-      <div class=twopane>
-          <div class=ovbl>TOP DESTINATION IPS</div><div class=ovbi id=ov_dstip_msg></div><div class=ovsl id=ov_dstip_sl></div>
+        </div>
+        <div class=rightpane> 
+          <div class=ovbl>TOP IPS DESTINO</div><div class=ovbi id=ov_dstip_msg></div><div class=ovsl id=ov_dstip_sl></div>
           <div id=ov_dstip></div>
-        
+        </div>
       </div>
       <div class=twopane>
-        
-          <div class=ovbl>TOP SOURCE COUNTRIES</div><div class=ovbi id=ov_srccc_msg></div><div class=ovsl id=ov_srccc_sl></div>
+        <div class=leftpane>
+          <div class=ovbl>TOP PAISES ORIGEN</div><div class=ovbi id=ov_srccc_msg></div><div class=ovsl id=ov_srccc_sl></div>
           <div id=ov_srccc></div>
-        
-      </div>
-<div class=twopane>
-       
-         
-          <div class=ovbl>TOP DESTINATION COUNTRIES</div><div class=ovbi id=ov_dstcc_msg></div><div class=ovsl id=ov_dstcc_sl></div>
+        </div>
+        <div class=rightpane> 
+          <div class=ovbl>TOP PAISES DESTINO</div><div class=ovbi id=ov_dstcc_msg></div><div class=ovsl id=ov_dstcc_sl></div>
           <div id=ov_dstcc></div>
-        
+        </div>
       </div>
       <div class=twopane>
-        
-          <div class=ovbl>TOP SOURCE PORTS</div><div class=ovbi id=ov_srcpt_msg></div><div class=ovsl id=ov_srcpt_sl></div>
+        <div class=leftpane>
+          <div class=ovbl>TOP PUERTOS ORIGEN</div><div class=ovbi id=ov_srcpt_msg></div><div class=ovsl id=ov_srcpt_sl></div>
           <div id=ov_srcpt></div>
-        
-         
-          <div class=ovbl>TOP DESTINATION PORTS</div><div class=ovbi id=ov_dstpt_msg></div><div class=ovsl id=ov_dstpt_sl></div>
+        </div>
+        <div class=rightpane> 
+          <div class=ovbl>TOP PUERTOS DESTINO</div><div class=ovbi id=ov_dstpt_msg></div><div class=ovsl id=ov_dstpt_sl></div>
           <div id=ov_dstpt></div>
-        
+        </div>
       </div>
       <div class=onepane>
-        <div class=ovbl>GEOGRAPHIC DISTRIBUTION</div><div id=ovmapstat class=ovstat></div><div class=ovbi id=ov_map_msg></div><div class=ovsl id=ov_map_sl></div>
+        <div class=ovbl>UBICACION GEOGRAFICA</div><div id=ovmapstat class=ovstat></div><div class=ovbi id=ov_map_msg></div><div class=ovsl id=ov_map_sl></div>
         <div id=ov_map></div>
       </div>
     </div>
@@ -148,15 +207,15 @@ dbC();
 
 <div class=box id=cat_box>
   <div class=cat_top>
-    <div class=box_label id=cat_box_label>COMMENTS</div>
+    <div class=box_label id=cat_box_label>COMENTARIOS</div>
     <div title="close" class="box_close" data-box=cat><img class=il src=.css/close.png></div>
     <div title=refresh class=cat_refresh><img class=il src=.css/reload.png></div>
     <div id=ovcstat class="box_stat"></div>
   </div>
   <div class=cm_controls>
-    <div class=cat_l1>COMMENT:</div>
+    <div class=cat_l1>COMENTARIOS:</div>
     <div class=cat_r1><input class=cat_msg_txt type=text maxlength=255 placeholder=Comment /></div>
-    <div class=cat_l1>CLASSIFICATION:</div>
+    <div class=cat_l1>CLASIFICACION:</div>
     <div class=cat_r1 id=cw_buttons>
       <div class=b_C1 data-n=11>C1</div>
       <div class=b_C2 data-n=12>C2</div>
@@ -170,7 +229,7 @@ dbC();
       <!-- Will require a mod to sguil (DeleteEventIDList) -->
       <!--&nbsp;&nbsp;<span class=links data-n=0>apply comment only</span>-->
     </div>
-    <div class=cat_note>&nbsp;&nbsp;<b>Note:</b> you can click a comment below to reuse it (followed by a classification action) <b>or</b> click on the "F" icon followed by "enter" to use as a filter<br></div>
+    <div class=cat_note>&nbsp;&nbsp;<b>Note:</b> puede hacer clic e un comentario (a continuacion para reutilizarlo) <b>o</b> hcer clic en el icono "F" seguido de enter para usar como filtro<br></div>
  
   </div>
   <div class=cm_tbl></div>
@@ -178,7 +237,7 @@ dbC();
 
 <div class=box id=sen_box>
   <div class=sen_top>
-    <div class=box_label>SENSORS</div>
+    <div class=box_label>SENNSORES</div>
     <div title="close" class="box_close" data-box=sen><img class=il src=.css/close.png></div> 
   </div>
   <div class=sen_controls></div>
@@ -187,15 +246,15 @@ dbC();
 
 <div class=box id=fltr_box>
   <div class=fltr_top>
-    <div class=box_label>FILTERS and URLs</div>
+    <div class=box_label>FILTROS Y URLs</div>
     <div title="close" class="box_close" data-box=fltr><img class=il src=.css/close.png></div>
     <div title=add class=filter_new><img class=il src=.css/add.png></div>
     <div title=refresh class=filter_refresh><img class=il src=.css/reload.png></div>
     <div title=help class=filter_help><img class=il src=.css/help.png></div>
   </div>
   <div class=hp_links>
-    <div class=hp_typet>type:</div>
-    <div class="hp_type hp_type_active" data-val=filter>FILTER</div>
+    <div class=hp_typet>tipo:</div>
+    <div class="hp_type hp_type_active" data-val=filter>FILTRO</div>
     <div class=hp_type data-val=url>URL</div>
   </div>
   <div class=fltr_tbl></div>
@@ -215,12 +274,12 @@ dbC();
 
 <div class=box id=srch_box>
   <div class=srch_top>
-    <div class=box_label id=srch_box_label>EXTERNAL LOOKUP</div>
+    <div class=box_label id=srch_box_label>BUSQUEDA EXTERNA</div>
     <div title="close" class="box_close" data-box=srch><img class=il src=.css/close.png></div>
     <div id=srch_stat_msg class="box_stat hide"></div> 
   </div>
   <div class=lu_links>
-    <div class=lu_typet>type:</div>
+    <div class=lu_typet>tipo:</div>
     <div class="lu_type lu_type_active" data-val=esc>ELASTICSEARCH</div>
     <div class=lu_type data-val=url>URL</div>
   </div>
@@ -228,10 +287,10 @@ dbC();
     <div class=cat_l1>QUERY:</div>
     <div class=cat_r1><input class=srch_txt type=text maxlength=1000 value="*"></div>
     <div class=clear_srch><img title=clear class=il src=.css/delete.png></div>
-    <div class=cat_l1>TERMS:</div>
+    <div class=cat_l1>TERMINOS:</div>
     <div class=cat_r1 id=srchterms></div>
     <div id=el_tdc>
-      <div class=cat_l1>INTERVAL:</div>
+      <div class=cat_l1>INTERVALO:</div>
       <div class=cat_r1 id=srchint>
         <input id=el_start class=el_ts type=text maxlength=19>
         &nbsp;&nbsp;-&gt; &nbsp;&nbsp;
@@ -243,7 +302,7 @@ dbC();
           <div class=srch_do><img title=search class=il src=.css/search.png></div>
         </div>
         <div class=cat_r1 id=srchsrc>
-          <b>no</b> sources are selected
+          <b>no</b> origenes seleccionados
         </div>
       </div>
     </div>
@@ -261,10 +320,10 @@ dbC();
 
 <div class=tagbox>
   <input type=text class=taginput maxlength=50 width=200>
-  <span class=tagok>ADD</span>
-  <span class=tagcancel>CANCEL</span>
+  <span class=tagok>AGREGAR</span>
+  <span class=tagcancel>CANCELAR</span>
   <span class=spacer>|</span>
-  <span class=tagrm>REMOVE</span>
+  <span class=tagrm>REMOVER</span>
 </div>
 
 <div class=bottom>

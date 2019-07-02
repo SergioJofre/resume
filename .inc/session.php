@@ -25,12 +25,12 @@ session_start();
 function sKill() {
     session_destroy();
     session_unset();
-    header ("Location: /squert/login.php");
+    header ("Location: /resumen/login.php");
     exit();
 }
 
 function sInt() {
-     header ("Location: /squert/login.php");
+     header ("Location: /resumen/login.php");
      exit();
 }
 

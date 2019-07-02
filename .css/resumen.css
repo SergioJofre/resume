@@ -10,6 +10,7 @@ margin:0;
 -moz-user-select: none;
 -ms-user-select: none;
 user-select: none;
+background-color: #CEECF5;
 }
 tr.none {
 border:none;
@@ -132,7 +133,7 @@ width:100%;
 padding-top:10px;
 padding-bottom:5px;
 float:left;
-background-color:#fff;
+background-color: #CEECF5;
 }
 div.rl {
 float:left;
@@ -1061,20 +1062,22 @@ text-align:center;
 color:#333366;
 float:left;
 z-index:20;
-background-color:#fff;
+background-color:#CEECF5;
 clear:both;
 }
 div.tab {
+	border top: none;
 width:100px;
 color:#ff3333;
-float:left;
+/*float:left*/;
 font-size:12px;
 cursor:pointer;
 padding:6px;
-margin-left:3px;
+margin-left: auto;
+margin-right: auto;
 }
 div.tab:hover {
-color:#595959;
+color:#E0ECF8;
 }
 div.tab_active {
 width:100px;
@@ -1084,7 +1087,8 @@ font-size:12px;
 padding:6px;
 border-top:none;
 background-color:#3933ff;
-margin-left:3px;
+margin-left: : auto;
+margin-right: auto;
 border-bottom-right-radius:3px;
 border-bottom-left-radius:3px;
 }
@@ -1988,7 +1992,7 @@ color:#fff;
 div.tag_empty,div.history_empty {
 font-weight:bold;
 font-size:13pt;
-color:#dadada;
+color:#1C1C1C;
 width:100%;
 margin-top:10px;
 margin-left:5px;
